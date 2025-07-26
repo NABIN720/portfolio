@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.title }} - Portfolio{% endblock %}
+
+{% block content %}
+<section class="py-5" style="margin-top: 80px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}" style="height: 400px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                            <i class="fas fa-code fa-5x text-muted"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h1 class="card-title">{{ project.title }}</h1>
+                        <p class="text-muted mb-3">
+                            <i class="fas fa-calendar me-1"></i>{{ project.created_at|date:"F d, Y" }}
+                        </p>
+                        
+                        <div class="mb-4">
+                            {% for tech in project.technologies.all %}
+                                <span class="badge bg-primary me-1 mb-1">{{ tech.name }}</span>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="project-description">
+                            {{ project.description|linebreaks }}
+                        </div>
+                        
+                        <div class="d-flex gap-3 mt-4">
+                            {% if project.demo_url %}
+                                <a href="{{ project.demo_url }}" class="btn btn-primary" target="_blank">
+                                    <i class="fas fa-external-link-alt me-1"></i>Live Demo
+                                </a>
+                            {% endif %}
+                            {% if project.github_url %}
+                                <a href="{{ project.github_url }}" class="btn btn-outline-primary" target="_blank">
+                                    <i class="fab fa-github me-1"></i>View Code
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Project Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <strong>Technologies Used:</strong>
+                            <ul class="mt-2">
+                                {% for tech in project.technologies.all %}
+                                    <li>{{ tech.name }}</li>
+                                {% empty %}
+                                    <li class="text-muted">No technologies specified</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <strong>Project Type:</strong>
+                            <p class="mb-0">{% if project.featured %}Featured Project{% else %}Regular Project{% endif %}</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <strong>Created:</strong>
+                            <p class="mb-0">{{ project.created_at|date:"F Y" }}</p>
+                        </div>
+                        
+                        {% if project.demo_url or project.github_url %}
+                        <div class="d-grid gap-2">
+                            {% if project.demo_url %}
+                                <a href="{{ project.demo_url }}" class="btn btn-primary btn-sm" target="_blank">
+                                    <i class="fas fa-external-link-alt me-1"></i>Visit Live Site
+                                </a>
+                            {% endif %}
+                            {% if project.github_url %}
+                                <a href="{{ project.github_url }}" class="btn btn-outline-secondary btn-sm" target="_blank">
+                                    <i class="fab fa-github me-1"></i>Source Code
+                                </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Back to Projects -->
+                <div class="mt-3">
+                    <a href="{% url 'portfolio:projects' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

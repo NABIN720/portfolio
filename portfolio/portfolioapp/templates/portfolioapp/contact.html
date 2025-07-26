@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact - Portfolio{% endblock %}
+
+{% block content %}
+<section class="py-5" style="margin-top: 80px;">
+    <div class="container" style="min-height: 71vh;">
+        <h1 class="text-center mb-5" data-aos="fade-up">Get In Touch</h1>
+        
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="contactForm" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form.name }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form.email }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                {{ form.subject }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form.message }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i>Send Message
+                            </button>
+                        </form>
+                        
+                        <div id="messageAlert" class="alert d-none mt-3" role="alert"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const messageAlert = document.getElementById('messageAlert');
+    
+    fetch('{% url "portfolioapp:contact" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            messageAlert.className = 'alert alert-success';
+            messageAlert.textContent = 'Message sent successfully! I\'ll get back to you soon.';
+            messageAlert.classList.remove('d-none');
+            this.reset();
+        } else {
+            messageAlert.className = 'alert alert-danger';
+            messageAlert.textContent = 'Error sending message. Please try again.';
+            messageAlert.classList.remove('d-none');
+        }
+    })
+    .catch(error => {
+        messageAlert.className = 'alert alert-danger';
+        messageAlert.textContent = 'Error sending message. Please try again.';
+        messageAlert.classList.remove('d-none');
+    });
+});
+</script>
+{% endblock %}
