@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}About - Portfolio{% endblock %}
+
+{% block content %}
+<section class="py-5" style="margin-top: 80px;">
+    <div class="container">
+        <!-- About Section -->
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-4 text-center mb-4 mb-lg-0" data-aos="fade-right">
+                {% if profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="Profile" class="img-fluid rounded-circle shadow" style="max-width: 300px;">
+                {% else %}
+                    <div class="bg-primary rounded-circle mx-auto d-flex align-items-center justify-content-center shadow" style="width: 300px; height: 300px;">
+                        <i class="fas fa-user fa-5x text-white"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-8" data-aos="fade-left">
+                <h1 class="display-4 mb-4">About Me</h1>
+                <p class="lead">
+                    {% if profile %}{{ profile.bio }}{% else %}
+                    I'm a passionate full-stack developer with a love for creating innovative digital solutions. 
+                    I enjoy working with modern technologies and building applications that make a difference.
+                    {% endif %}
+                </p>
+                
+                {% if profile %}
+                <div class="row mt-4">
+                    {% if profile.location %}
+                    <div class="col-md-6 mb-2">
+                        <strong><i class="fas fa-map-marker-alt text-primary me-2"></i>Location:</strong> {{ profile.location }}
+                    </div>
+                    {% endif %}
+                    {% if profile.phone %}
+                    <div class="col-md-6 mb-2">
+                        <strong><i class="fas fa-phone text-primary me-2"></i>Phone:</strong> {{ profile.phone }}
+                    </div>
+                    {% endif %}
+                    <div class="col-md-6 mb-2">
+                        <strong><i class="fas fa-envelope text-primary me-2"></i>Email:</strong> {{ profile.user.email }}
+                    </div>
+                    {% if profile.website_url %}
+                    <div class="col-md-6 mb-2">
+                        <strong><i class="fas fa-globe text-primary me-2"></i>Website:</strong> 
+                        <a href="{{ profile.website_url }}" target="_blank">{{ profile.website_url }}</a>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mt-4">
+                    {% if profile.resume %}
+                        <a href="{{ profile.resume.url }}" class="btn btn-primary me-2" target="_blank">
+                            <i class="fas fa-download me-1"></i>Download Resume
+                        </a>
+                    {% endif %}
+                    {% if profile.github_url %}
+                        <a href="{{ profile.github_url }}" class="btn btn-outline-primary me-2" target="_blank">
+                            <i class="fab fa-github me-1"></i>GitHub
+                        </a>
+                    {% endif %}
+                    {% if profile.linkedin_url %}
+                        <a href="{{ profile.linkedin_url }}" class="btn btn-outline-primary me-2" target="_blank">
+                            <i class="fab fa-linkedin me-1"></i>LinkedIn
+                        </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-center mb-5" data-aos="fade-up">Skills & Expertise</h2>
+                {% if skills %}
+                    {% regroup skills by category as skill_groups %}
+                    <div class="row">
+                        {% for group in skill_groups %}
+                        <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="{% cycle 100 200 %}">
+                            <h4 class="text-capitalize mb-3">{{ group.grouper|title }}</h4>
+                            {% for skill in group.list %}
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>{{ skill.name }}</span>
+                                    <span class="text-muted">{{ skill.proficiency }}%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: {{ skill.proficiency }}%"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-center text-muted">No skills added yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        {% if experiences %}
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-center mb-5" data-aos="fade-up">Work Experience</h2>
+                <div class="timeline">
+                    {% for experience in experiences %}
+                    <div class="timeline-item" data-aos="fade-up" data-aos-delay="{% cycle 100 200 300 %}">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ experience.position }}</h5>
+                                <h6 class="card-subtitle mb-2 text-primary">{{ experience.company }}</h6>
+                                <p class="text-muted small mb-2">
+                                    {{ experience.start_date|date:"M Y" }} - 
+                                    {% if experience.current %}Present{% else %}{{ experience.end_date|date:"M Y" }}{% endif %}
+                                </p>
+                                <p class="card-text">{{ experience.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Education Section -->
+        {% if education %}
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-5" data-aos="fade-up">Education</h2>
+                <div class="row">
+                    {% for edu in education %}
+                    <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{% cycle 100 200 %}">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ edu.degree }}</h5>
+                                <h6 class="card-subtitle mb-2 text-primary">{{ edu.institution }}</h6>
+                                <p class="text-muted small mb-2">{{ edu.field_of_study }}</p>
+                                <p class="text-muted small mb-2">
+                                    {{ edu.start_date|date:"M Y" }} - 
+                                    {% if edu.end_date %}{{ edu.end_date|date:"M Y" }}{% else %}Present{% endif %}
+                                </p>
+                                {% if edu.gpa %}
+                                <p class="text-muted small">GPA: {{ edu.gpa }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.timeline {
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--primary-color);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    margin-left: 50px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -36px;
+    top: 20px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 10px;
+    }
+    
+    .timeline-item {
+        margin-left: 30px;
+    }
+    
+    .timeline-item::before {
+        left: -26px;
+    }
+}
+</style>
+{% endblock %}

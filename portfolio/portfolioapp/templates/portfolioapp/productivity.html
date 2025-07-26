@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block title %}Productivity Dashboard - Portfolio{% endblock %}
+
+{% block content %}
+<section class="py-5" style="margin-top: 80px;">
+    <div class="container">
+        <h1 class="text-center mb-5" data-aos="fade-up">Productivity Dashboard</h1>
+        
+        <div class="row">
+            <!-- Weather Widget -->
+            <div class="col-lg-6 col-md-6 mb-4" data-aos="fade-up">
+                <div class="productivity-widget weather-widget">
+                    <h5><i class="fas fa-cloud-sun me-2"></i>Weather</h5>
+                    <div class="weather-content">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="cityInput" placeholder="Enter city name" value="Surunga">
+                            <button class="btn btn-light" type="button" onclick="getWeather()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div id="weatherData">
+                            <div class="text-center">
+                                <div class="spinner-border text-light" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Quote Widget -->
+            <div class="col-lg-6 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="productivity-widget quote-widget">
+                    <h5><i class="fas fa-quote-left me-2"></i>Daily Inspiration</h5>
+                    <div id="quoteData">
+                        <div class="text-center">
+                            <div class="spinner-border text-light" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-light btn-sm mt-3" onclick="getQuote()">
+                        <i class="fas fa-refresh me-1"></i>New Quote
+                    </button>
+                </div>
+            </div>
+
+            <!-- News Widget -->
+            <div class="col-lg-8 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="productivity-widget news-widget">
+                    <h5><i class="fas fa-newspaper me-2"></i>Latest News</h5>
+                    <div class="mb-3">
+                        <select class="form-select" id="newsCategory" onchange="getNews()">
+                            <option value="technology">Technology</option>
+                            <option value="business">Business</option>
+                            <option value="science">Science</option>
+                            <option value="health">Health</option>
+                        </select>
+                    </div>
+                    <div id="newsData" style="max-height: 400px; overflow-y: auto;">
+                        <div class="text-center">
+                            <div class="spinner-border text-light" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- nasa pic of the day Widget -->
+            <div class="col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="productivity-widget crypto-widget">
+                    <h5><i class="fab fa-bitcoin me-2"></i>Picture of the Day</h5>
+                    <div id="apodContainer" style="max-height: 500px; overflow-y: auto;">
+                        <div class="text-center">
+                            <div class="spinner-border text-light" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-light btn-sm mt-3" onclick="getAPOD()">
+                        <i class="fas fa-refresh me-1"></i>Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- GitHub Stats Widget -->
+            <div class="col-lg-12 mb-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="productivity-widget">
+                    <h5><i class="fab fa-github me-2"></i>GitHub Statistics</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="githubUsername" placeholder="Enter GitHub username" value="nabin720">
+                        <button class="btn btn-primary" type="button" onclick="getGitHubStats()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div id="githubData">
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Weather API
+async function getWeather() {
+    const city = document.getElementById('cityInput').value.trim();
+    const weatherData = document.getElementById('weatherData');
+
+    if (!city) {
+        weatherData.innerHTML = `<p class="text-light">Please enter a city name.</p>`;
+        return;
+    }
+
+    weatherData.innerHTML = `<p class="text-light">Loading...</p>`;
+    
+    try {
+        const response = await fetch(`/api/weather/?city=${encodeURIComponent(city)}`);
+        const data = await response.json();
+        
+        if (data.error) {
+            weatherData.innerHTML = `<p class="text-light">Error: ${data.error}</p>`;
+        } else {
+            weatherData.innerHTML = `
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <h3>${Math.round(data.temperature)}°C</h3>
+                        <p class="mb-1">${data.city}, ${data.country}</p>
+                        <p class="mb-0 text-capitalize">${data.description}</p>
+                    </div>
+                    <div class="col-6 text-end">
+                        <img src="https://openweathermap.org/img/w/${data.icon}.png" alt="Weather" style="width: 64px;">
+                        <p class="mb-0 small">Humidity: ${data.humidity}%</p>
+                        <p class="mb-0 small">Wind: ${data.wind_speed} m/s</p>
+                    </div>
+                </div>
+            `;
+        }
+    } catch (error) {
+        weatherData.innerHTML = `<p class="text-light">Error loading weather data</p>`;
+    }
+}
+
+// Quote API
+async function getQuote() {
+    const quoteData = document.getElementById('quoteData');
+    
+    try {
+        const response = await fetch('/api/quote/');
+        const data = await response.json();
+        
+        if (data.error) {
+            quoteData.innerHTML = `<p class="text-light">Error: ${data.error}</p>`;
+        } else {
+            quoteData.innerHTML = `
+                <blockquote class="mb-3">
+                    <p class="mb-2">"${data.text}"</p>
+                    <strong class="blockquote-footer text-light">
+                        <cite title="Source Title">${data.author}</cite>
+                    </strong>
+                </blockquote>
+            `;
+        }
+    } catch (error) {
+        quoteData.innerHTML = `<p class="text-light">Error loading quote</p>`;
+    }
+}
+
+// News API
+async function getNews() {
+    const category = document.getElementById('newsCategory').value;
+    const newsData = document.getElementById('newsData');
+    
+    try {
+        const response = await fetch(`/api/news/?category=${category}`);
+        const data = await response.json();
+        
+        if (data.error) {
+            newsData.innerHTML = `<p class="text-light">Error: ${data.error}</p>`;
+        } else {
+            const articles = data.articles || [];
+            let newsHTML = '';
+            
+            articles.slice(0, 5).forEach(article => {
+                newsHTML += `
+                    <div class="border-bottom border-light pb-2 mb-2">
+                        <h6 class="mb-1">
+                            <a href="${article.url}" target="_blank" class="text-light text-decoration-none">
+                                ${article.title}
+                            </a>
+                        </h6>
+                        <p class="mb-1 small">${article.description}</p>
+                        <small class="text-light opacity-75">${article.source}</small>
+                    </div>
+                `;
+            });
+            
+            newsData.innerHTML = newsHTML || '<p class="text-light">No news available</p>';
+        }
+    } catch (error) {
+        newsData.innerHTML = `<p class="text-light">Error loading news</p>`;
+    }
+}
+
+// NASA API
+async function getAPOD() {
+    try {
+        const response = await fetch('/api/apod/');
+        const data = await response.json();
+
+        if (data.error) {
+            console.error(data.error);
+            return;
+        }
+
+        const apodDiv = document.getElementById('apodContainer');
+
+        apodDiv.innerHTML = `
+            <h4>${data.title}</h4>
+            <p><small>${data.date} | ${data.copyright}</small></p>
+            ${data.media_type === 'image' 
+                ? `<img src="${data.url}" alt="${data.title}" class="img-fluid mb-2"/>`
+                : `<iframe src="${data.url}" frameborder="0" allowfullscreen class="w-100" style="height: 300px;"></iframe>`}
+            <p>${data.explanation}</p>
+        `;
+    } catch (err) {
+        console.error('Error fetching APOD:', err);
+    }
+}
+
+// GitHub API
+async function getGitHubStats() {
+    const username = document.getElementById('githubUsername').value;
+    const githubData = document.getElementById('githubData');
+    
+    try {
+        const response = await fetch(`/api/github/?username=${encodeURIComponent(username)}`);
+        const data = await response.json();
+        
+        if (data.error) {
+            githubData.innerHTML = `<p class="text-muted">Error: ${data.error}</p>`;
+        } else {
+            let reposHTML = '';
+            data.recent_repos.forEach(repo => {
+                reposHTML += `
+                    <div class="col-md-6 mb-2">
+                        <div class="card card-body h-100">
+                            <h6 class="card-title mb-1">
+                                <a href="${repo.url}" target="_blank" class="text-decoration-none">${repo.name}</a>
+                            </h6>
+                            <p class="card-text small text-muted">${repo.description || 'No description'}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">${repo.language || 'N/A'}</small>
+                                <small class="text-muted">⭐ ${repo.stars}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            githubData.innerHTML = `
+                <div class="row mb-4">
+                    <div class="col-md-3 text-center">
+                        <img src="${data.avatar_url}" alt="Avatar" class="rounded-circle" style="width: 80px; height: 80px;">
+                        <h5 class="mt-2">${data.name || data.username}</h5>
+                        <p class="small text-muted">${data.bio || 'No bio available'}</p>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <h4 class="text-primary">${data.public_repos}</h4>
+                                <small class="text-muted">Repositories</small>
+                            </div>
+                            <div class="col-4">
+                                <h4 class="text-primary">${data.followers}</h4>
+                                <small class="text-muted">Followers</small>
+                            </div>
+                            <div class="col-4">
+                                <h4 class="text-primary">${data.following}</h4>
+                                <small class="text-muted">Following</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h6>Recent Repositories:</h6>
+                <div class="row">
+                    ${reposHTML}
+                </div>
+            `;
+        }
+    } catch (error) {
+        githubData.innerHTML = `<p class="text-muted">Error loading GitHub data</p>`;
+    }
+}
+
+// Load initial data
+document.addEventListener('DOMContentLoaded', function() {
+    getWeather();
+    getQuote();
+    getNews();
+    getAPOD();
+    getGitHubStats();
+});
+</script>
+{% endblock %}
