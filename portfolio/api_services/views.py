@@ -123,15 +123,19 @@ def get_quote(request):
 
 def get_github_stats(request):
     """Get GitHub user statistics"""
-    username = request.GET.get('username', 'octocat')
+    username = request.GET.get('username', 'nabin720')
+    headers = {
+        'Authorization': f'token {settings.GITHUB_TOKEN}',
+        'Accept': 'application/vnd.github+json'
+    }
     
     try:
         # Get user info
-        user_response = requests.get(f'https://api.github.com/users/{username}')
+        user_response = requests.get(f'https://api.github.com/users/{username}',headers=headers)
         user_data = user_response.json()
         
         # Get repositories
-        repos_response = requests.get(f'https://api.github.com/users/{username}/repos?sort=updated&per_page=5')
+        repos_response = requests.get(f'https://api.github.com/users/{username}/repos?sort=updated&per_page=5',headers=headers)
         repos_data = repos_response.json()
         
         if user_response.status_code == 200:
