@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from email.policy import default
 from pathlib import Path
 from decouple import config
 import os
@@ -25,8 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG', default=False, cast=bool)
-DEBUG = True 
+DEBUG = config('DEBUG', default=False, cast=bool)
+# DEBUG = True 
 ALLOWED_HOSTS = ['*']
 
 
@@ -139,3 +140,4 @@ WEATHER_API_KEY = config('WEATHER_API_KEY', default='')
 NEWS_API_KEY = config('NEWS_API_KEY', default='')
 QUOTE_API_KEY = config('QUOTE_API_KEY', default='')
 NASA_API_KEY = config('NASA_API_KEY', default='')
+GITHUB_TOKEN = config("GITHUB_TOKEN",default="")
