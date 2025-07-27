@@ -38,3 +38,4 @@ CORS_ALLOWED_ORIGINS = [
 SECRET_KEY = os.environ.get('SECRET_KEY', '')
 WEATHER_API_KEY = os.environ.get('WEATHER_API_KEY', '')
 NEWS_API_KEY = os.environ.get('NEWS_API_KEY', '')
+NASA_API_KEY = config('NASA_API_KEY', default='')
