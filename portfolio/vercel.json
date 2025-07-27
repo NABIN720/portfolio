@@ -1,15 +1,9 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "portfolio/wsgi.py",
-      "use": "@vercel/python",
-      "config": { 
-        "maxLambdaSize": "15mb", 
-        "runtime": "python3.9" 
-      }
+  "functions": {
+    "api/index.py": {
+      "runtime": "python3.9"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/static/(.*)",
@@ -21,10 +15,10 @@
     },
     {
       "src": "/(.*)",
-      "dest": "portfolio/wsgi.py"
+      "dest": "/api/index.py"
     }
   ],
   "env": {
-    "DJANGO_SETTINGS_MODULE": "portfolio.settings"
+    "DJANGO_SETTINGS_MODULE": "portfolio.settings_vercel"
   }
 }
