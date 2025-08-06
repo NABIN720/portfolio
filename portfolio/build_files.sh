@@ -1,11 +1,14 @@
-#!/bin/bash
+#!usr/bin bash
 
-# Install dependencies using the correct Python version
-/opt/buildhome/python*/bin/pip install -r requirements.txt
+echo "Building project packages..."
 
-# Set Python path explicitly
-PYTHON_PATH=$(find /opt/buildhome/python*/bin -name python | head -1)
+pip install -r requirements.txt --upgrade
 
-# Run Django commands
-$PYTHON_PATH manage.py collectstatic --noinput --clear
-$PYTHON_PATH manage.py migrate --noinput
+echo "Migrating Database..."
+manage.py makemigrations --noinput
+manage.py migrate --noinput
+
+echo "Collecting static files..."
+manage.py collectstatic --noinput --clear
+
+echo "Build completed!"

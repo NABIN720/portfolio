@@ -8,6 +8,5 @@ urlpatterns = [
     path('', include('portfolioapp.urls')),
     path('api/', include('api_services.urls')),
 ] 
-
-if not settings.DEBUG:  # Even in production
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
