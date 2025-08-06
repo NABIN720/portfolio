@@ -1,14 +1,11 @@
-#!usr/bin bash
+#!/bin/bash
 
-echo "Building project packages..."
-python3 -m pip install --upgrade pip
-python3 -m pip install -r requirements.txt --upgrade
+# Install dependencies
+pip install -r requirements.txt
 
-echo "Migrating Database..."
-python3 manage.py makemigrations --noinput
-python3 manage.py migrate --noinput
+# Collect static files
+mkdir -p staticfiles_build/static
+python manage.py collectstatic --noinput --clear
 
-echo "Collecting static files..."
-python3 manage.py collectstatic --noinput --clear
-
-echo "Build completed!"
+# Run migrations (if using database)
+python manage.py migrate --noinput
