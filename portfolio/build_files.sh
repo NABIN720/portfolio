@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies using the correct Python version
+/opt/buildhome/python*/bin/pip install -r requirements.txt
 
-# Collect static files
-mkdir -p staticfiles_build/static
-python manage.py collectstatic --noinput --clear
+# Set Python path explicitly
+PYTHON_PATH=$(find /opt/buildhome/python*/bin -name python | head -1)
 
-# Run migrations (if using database)
-python manage.py migrate --noinput
+# Run Django commands
+$PYTHON_PATH manage.py collectstatic --noinput --clear
+$PYTHON_PATH manage.py migrate --noinput
