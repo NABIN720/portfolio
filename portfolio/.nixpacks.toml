@@ -1,0 +1,11 @@
+[phases.build]
+nixPkgs = ["python39", "python39Packages.pip", "postgresql_16"]
+commands = [
+    "python -m pip install --upgrade pip",
+    "python -m pip install -r requirements.txt",
+    "python manage.py migrate",
+    "python manage.py collectstatic --noinput"
+]
+
+[phases.start]
+command = "gunicorn portfolio.wsgi:application --bind 0.0.0.0:8080"
