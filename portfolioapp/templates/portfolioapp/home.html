@@ -10,10 +10,10 @@
             <div class="col-lg-6" data-aos="fade-right">
                 <h1 class="display-4 fw-bold mb-4">
                     Hello, I'm 
-                    {% if profile %}{{ profile.user.first_name }} {{ profile.user.last_name }}{% else %}Your Name{% endif %}
+                    {% if profile %}{{ profile.user.first_name }} {{ profile.user.last_name }}{% else %}Nabin Bhattarai{% endif %}
                 </h1>
                 <p class="lead mb-4">
-                    {% if profile %}{{ profile.bio }}{% else %}Full-stack developer passionate about creating innovative solutions{% endif %}
+                    {% if profile %}{{ profile.bio }}{% else %}Information, Communication and Electronics Engineer{% endif %}
                 </p>
                 <div class="d-flex gap-3">
                     <a href="{% url 'portfolioapp:projects' %}" class="btn btn-primary btn-lg">View My Work</a>
