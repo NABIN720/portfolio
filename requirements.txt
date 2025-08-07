@@ -94,7 +94,7 @@ networkx==3.2.1
 notebook==7.4.2
 notebook_shim==0.2.4
 openstacksdk==4.5.0
-os-client-config==2.3.0
+os-client-config==2.1.0
 os-service-types==1.8.0
 osc-lib==4.1.0
 oslo.cache==3.11.0
