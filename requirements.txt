@@ -18,7 +18,7 @@ cachetools==6.1.0
 certifi==2025.4.26
 cffi==1.17.1
 charset-normalizer==3.4.2
-cliff==4.10.0
+# cliff==4.10.0
 cmd2==2.7.0
 comm==0.2.2
 crispy-bootstrap5==2025.4
