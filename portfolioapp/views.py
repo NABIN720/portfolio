@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from .models import Profile, Project, Skill, Experience, Education, Contact
 from .forms import ContactForm
+from decouple import config
+
 import json
 
 def home(request):
@@ -58,6 +61,16 @@ def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            send_mail(
+                subject=f"New Contact Form: {subject}",
+                message=f"From: {name} <{email}>\n\n{message}",
+                from_email=email,
+                recipient_list= [config('EMAIL_HOST_USER', default='')],  
+            )
             form.save()
             return JsonResponse({'success': True})
         else:
