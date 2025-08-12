@@ -56,7 +56,10 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
             'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
         }
     })
-    .then(response => response.json())
+    .then(response => {
+    if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+    return response.json();
+})
     .then(data => {
         if (data.success) {
             messageAlert.className = 'alert alert-success';

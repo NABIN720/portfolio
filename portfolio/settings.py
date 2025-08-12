@@ -28,8 +28,12 @@ SECRET_KEY = config('SECRET_KEY', default='')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 # DEBUG = True 
-ALLOWED_HOSTS = ['nabinbhattarai021.com.np', 'www.nabinbhattarai021.com.np']
+ALLOWED_HOSTS = ['nabinbhattarai021.com.np', 'www.nabinbhattarai021.com.np','*']
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://nabinbhattarai021.com.np",
+    "https://www.nabinbhattarai021.com.np"
+]
 
 # Application definition
 
