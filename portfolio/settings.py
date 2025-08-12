@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY', default='')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 # DEBUG = True 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['nabinbhattarai021.com.np', 'www.nabinbhattarai021.com.np']
 
 
 # Application definition
