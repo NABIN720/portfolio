@@ -8,16 +8,16 @@
         <!-- About Section -->
         <div class="row align-items-center mb-5">
             <div class="col-lg-4 text-center mb-4 mb-lg-0" data-aos="fade-right">
-                <!-- {% if profile.profile_image %} -->
-                    <!-- <img src="{{ profile.profile_image.url }}" alt="Profile" class="img-fluid rounded-circle shadow" style="max-width: 300px;"> -->
-                     {% load static %}
-                    <img src="{% static 'images/profiles/PROFILE.jpg' %}" alt="Profile" class="img-fluid rounded-circle" style="max-width: 400px;">
+                {% if profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="Profile" class="img-fluid rounded-circle shadow" style="max-width: 300px;">
+                     <!-- {% load static %}
+                    <img src="{% static 'images/profiles/PROFILE.jpg' %}" alt="Profile" class="img-fluid rounded-circle" style="max-width: 400px;"> -->
 
-                <!-- {% else %}
+                {% else %}
                     <div class="bg-primary rounded-circle mx-auto d-flex align-items-center justify-content-center shadow" style="width: 300px; height: 300px;">
                         <i class="fas fa-user fa-5x text-white"></i>
                     </div>
-                {% endif %} -->
+                {% endif %}
             </div>
             <div class="col-lg-8" data-aos="fade-left">
                 <h1 class="display-4 mb-4">About Me</h1>
