@@ -121,21 +121,59 @@ def get_quote(request):
     except Exception as e:
         return JsonResponse({'error': str(e)})
 
+# def get_github_stats(request):
+#     """Get GitHub user statistics"""
+#     username = request.GET.get('username', 'nabin720')
+
+#     headers = {
+#         "Authorization": f"token {settings.GITHUB_TOKEN}"
+#     }
+    
+#     try:
+#         # Get user info
+#         user_response = requests.get(f'https://api.github.com/users/{username}', headers=headers)
+#         user_data = user_response.json()
+        
+#         # Get repositories
+#         repos_response = requests.get(f'https://api.github.com/users/{username}/repos?sort=updated&per_page=5', headers=headers)
+#         repos_data = repos_response.json()
+        
+#         if user_response.status_code == 200:
+#             github_stats = {
+#                 'username': user_data['login'],
+#                 'name': user_data['name'],
+#                 'bio': user_data['bio'],
+#                 'public_repos': user_data['public_repos'],
+#                 'followers': user_data['followers'],
+#                 'following': user_data['following'],
+#                 'avatar_url': user_data['avatar_url'],
+#                 'recent_repos': [
+#                     {
+#                         'name': repo['name'],
+#                         'description': repo['description'],
+#                         'language': repo['language'],
+#                         'stars': repo['stargazers_count'],
+#                         'url': repo['html_url']
+#                     } for repo in repos_data[:5] if isinstance(repos_data, list)
+#                 ]
+#             }
+#             return JsonResponse(github_stats)
+#         else:
+#             return JsonResponse({'error': 'GitHub user not found'})
+#     except Exception as e:
+#         return JsonResponse({'error': str(e)})
+    
 def get_github_stats(request):
     """Get GitHub user statistics"""
     username = request.GET.get('username', 'nabin720')
-
-    headers = {
-        "Authorization": f"token {settings.GITHUB_TOKEN}"
-    }
     
     try:
         # Get user info
-        user_response = requests.get(f'https://api.github.com/users/{username}', headers=headers)
+        user_response = requests.get(f'https://api.github.com/users/{username}')
         user_data = user_response.json()
         
         # Get repositories
-        repos_response = requests.get(f'https://api.github.com/users/{username}/repos?sort=updated&per_page=5', headers=headers)
+        repos_response = requests.get(f'https://api.github.com/users/{username}/repos?sort=updated&per_page=5')
         repos_data = repos_response.json()
         
         if user_response.status_code == 200:
@@ -162,7 +200,7 @@ def get_github_stats(request):
             return JsonResponse({'error': 'GitHub user not found'})
     except Exception as e:
         return JsonResponse({'error': str(e)})
-
+    
 def get_apod(request):
     """Fetch NASA Astronomy Picture of the Day (APOD)"""
     date = request.GET.get('date')  # optional YYYY-MM-DD
