@@ -14,6 +14,10 @@ from email.policy import default
 from pathlib import Path
 from decouple import config
 import os
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -93,10 +97,20 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',   # Database name from Supabase
+        'USER': 'postgres',   # Your DB user
+        'PASSWORD': config('PASSWORD', default=''),
+        'HOST': 'db.ogpzlydxpojjwmrbdlzd.supabase.co',
+        'PORT': '5432',
     }
 }
 # DATABASES = {
