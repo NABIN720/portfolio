@@ -104,14 +104,11 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 #     }
 # }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',   # Database name from Supabase
-        'USER': 'postgres',   # Your DB user
-        'PASSWORD': config('PASSWORD', default=''),
-        'HOST': 'db.ogpzlydxpojjwmrbdlzd.supabase.co',
-        'PORT': '5432',
-    }
+    "default": dj_database_url.config(
+        default=config("SUPABASE_DB_URL"),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 # DATABASES = {
 #     'default': {
@@ -164,12 +161,12 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles","static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-WHITENOISE_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'root')
+WHITENOISE_ROOT = STATIC_ROOT
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'staticfiles', 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
