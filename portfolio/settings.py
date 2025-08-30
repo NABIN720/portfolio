@@ -103,11 +103,16 @@ WSGI_APPLICATION = 'portfolio.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         default=config(""),
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
 DATABASES = {
     "default": dj_database_url.config(
-        default=config("SUPABASE_DB_URL"),
-        conn_max_age=600,
-        ssl_require=True
+        default=os.getenv("SUPABASE_DB_URL")
     )
 }
 # DATABASES = {
